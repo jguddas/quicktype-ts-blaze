@@ -1,11 +1,13 @@
 type PageProps = {
   input: string
   output: string
+  inputName: string,
   onChangeInput: (str: string) => void
+  onChangeInputName: (str: string) => void
   onChangeOutput: (str: string) => void
 }
 
-function Page({ input, output, onChangeInput, onChangeOutput }:PageProps) {
+function Page({ input, output, inputName, onChangeInput, onChangeInputName, onChangeOutput }:PageProps) {
   return (
     <div className="wrapper">
         <div className="page-wrapper">
@@ -27,10 +29,20 @@ function Page({ input, output, onChangeInput, onChangeOutput }:PageProps) {
                       borderRight: '1px solid rgba(101, 109, 119, 0.16)'
                     }}
                   >
-                    <div className="card-header">
+                    <div
+                      className="card-header d-flex"
+                      style={{ justifyContent: 'space-between' }}
+                    >
                       <h3 className="card-title">
                         Input
                       </h3>
+                      <input
+                        type="text"
+                        value={inputName}
+                        className="form-control"
+                        style={{ flexBasis: 150 }}
+                        onChange={(e) => onChangeInputName(e.target.value)}
+                      />
                     </div>
                     <div className="card-body">
                       <textarea
@@ -46,6 +58,11 @@ function Page({ input, output, onChangeInput, onChangeOutput }:PageProps) {
                       <h3 className="card-title">
                         Output
                       </h3>
+                      <input
+                        type="text"
+                        className="form-control"
+                        style={{ opacity: 0 }}
+                      />
                     </div>
                     <div className="card-body">
                       <textarea

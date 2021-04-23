@@ -49,16 +49,19 @@ const parseInput = async (str: string, name: string):Promise<string> => {
 
 function App() {
   const [input, setInput] = React.useState(EXAMPLE_JSON)
+  const [inputName, setInputName] = React.useState('example')
   const [output, setOutput] = React.useState('')
   React.useEffect(() => {
     setOutput('Loading…')
-    parseInput(input, 'example').then(setOutput, setOutput)
-  },[ input, setOutput ])
+    parseInput(input, inputName).then(setOutput, setOutput)
+  },[ input, inputName, setOutput ])
   return (
     <Page
       input={input}
+      inputName={inputName}
       output={output}
       onChangeInput={setInput}
+      onChangeInputName={setInputName}
       onChangeOutput={() => {}}
     />
   );
