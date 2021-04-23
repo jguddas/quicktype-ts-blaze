@@ -3,6 +3,8 @@ import json5 from 'json5'
 import Page from './Page'
 import './App.css';
 import '@tabler/core/dist/css/tabler.css';
+import TsBlazeTargetLanguage from './language'
+import { quicktype, InputData, jsonInputForTargetLanguage } from "quicktype-core";
 
 const EXAMPLE_JSON = `
 {
@@ -16,26 +18,47 @@ const EXAMPLE_JSON = `
 }
 `.trim()
 
-const parseInput = (str: string):string => {
+const parseJson = async (str: string):Promise<any> => {
   try {
-    const json = json5.parse(str)
-    return JSON.stringify(json, null, 2)
+    return json5.parse(str)
   } catch (e) {
-    return 'Invalid input!'
+    throw new Error('Invalid input!')
   }
+}
+
+const parseInput = async (str: string, name: string):Promise<string> => {
+  const targetLanguage = new TsBlazeTargetLanguage()
+  const jsonInput = jsonInputForTargetLanguage(targetLanguage);
+
+  await jsonInput.addSource({
+    name,
+    samples: [JSON.stringify(await parseJson(str))],
+  });
+
+  const inputData = new InputData();
+  inputData.addInput(jsonInput);
+
+  const result = await quicktype({
+    inferUuids: true,
+    inputData,
+    lang: targetLanguage,
+  });
+
+  return result.lines.join('\n')
 }
 
 function App() {
   const [input, setInput] = React.useState(EXAMPLE_JSON)
-  const [output, setOutput] = React.useState(parseInput(EXAMPLE_JSON))
+  const [output, setOutput] = React.useState('')
+  React.useEffect(() => {
+    setOutput('Loading…')
+    parseInput(input, 'example').then(setOutput, setOutput)
+  },[ input, setOutput ])
   return (
     <Page
       input={input}
       output={output}
-      onChangeInput={(str) => {
-        setInput(str)
-        setOutput(parseInput(str))
-      }}
+      onChangeInput={setInput}
       onChangeOutput={() => {}}
     />
   );
