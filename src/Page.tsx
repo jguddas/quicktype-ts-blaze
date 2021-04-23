@@ -66,11 +66,10 @@ function Page({ input, output, inputName, onChangeInput, onChangeInputName, onCh
                     </div>
                     <div className="card-body">
                       <textarea
-                        disabled
                         value={output}
                         onChange={(e) => onChangeOutput(e.target.value)}
                         className="form-control"
-                        style={{ minHeight: '20rem' }}
+                        style={{ minHeight: '20rem', backgroundColor: '#f4f6fa' }}
                       />
                     </div>
                   </div>
