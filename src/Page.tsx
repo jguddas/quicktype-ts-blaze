@@ -20,10 +20,10 @@ function Page({ input, output, inputName, onChangeInput, onChangeInputName, onCh
               </div>
             </div>
             <div className="container-xl">
-              <div className="card">
+              <div className="card" style={{ overflow: 'hidden' }}>
                 <div className="row">
                   <div
-                    className="col-6"
+                    className="col col-12 col-sm-12 col-md-6"
                     style={{
                       paddingRight: 0,
                       borderRight: '1px solid rgba(101, 109, 119, 0.16)'
@@ -53,7 +53,7 @@ function Page({ input, output, inputName, onChangeInput, onChangeInputName, onCh
                       />
                     </div>
                   </div>
-                  <div className="col-6" style={{ paddingLeft: 0 }}>
+                  <div className="col col-12 col-sm-12 col-md-6" style={{ paddingLeft: 0 }}>
                     <div className="card-header">
                       <h3 className="card-title">
                         Output
