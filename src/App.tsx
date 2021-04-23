@@ -38,11 +38,7 @@ const parseInput = async (str: string, name: string):Promise<string> => {
   const inputData = new InputData();
   inputData.addInput(jsonInput);
 
-  const result = await quicktype({
-    inferUuids: true,
-    inputData,
-    lang: targetLanguage,
-  });
+  const result = await quicktype({ inputData, lang: targetLanguage });
 
   return result.lines.join('\n')
 }
