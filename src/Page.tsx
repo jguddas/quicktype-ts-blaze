@@ -59,6 +59,7 @@ function Page({ input, output, inputName, onChangeInput, onChangeInputName, onCh
                         Output
                       </h3>
                       <input
+                        disabled
                         type="text"
                         className="form-control"
                         style={{ opacity: 0 }}
