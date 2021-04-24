@@ -104,6 +104,7 @@ const parseInput = async (
   name: string,
   inputType: InputType
 ):Promise<string> => {
+  if (!str) return ''
   const targetLanguage = new TsBlazeTargetLanguage()
   switch (inputType) {
     case 'json5':
