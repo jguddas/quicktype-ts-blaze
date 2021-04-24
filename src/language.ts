@@ -68,7 +68,7 @@ class TsBlazeRenderer extends ConvenienceRenderer {
       (_anyType) => "blaze.any()",
       (_nullType) => "blaze.null()",
       (_boolType) => "blaze.boolean()",
-      (_integerType) => "blaze.number()",
+      (_integerType) => "blaze.number().satisfies(isInteger)",
       (_doubleType) => "blaze.number()",
       (_stringType) => "blaze.string()",
       (arrayType) => ["blaze.array(", this.typeMapTypeFor(arrayType.items), ")"],
@@ -127,6 +127,9 @@ class TsBlazeRenderer extends ConvenienceRenderer {
     const stringFns:string[] = []
     this.forEachUniqType(( kind ) => {
       switch (kind) {
+        case 'integer':
+          stringFns.push("export const isInteger = (i:number) => i % 1 === 0")
+          break
         case 'date':
           regexps.push("const DATE_REGEXP = /^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)$/;")
           stringFns.push("export const isDate = DATE_REGEXP.test.bind(DATE_REGEXP);")
