@@ -1,13 +1,26 @@
+export type InputType = 'json5' | 'jsonShema'
+
 type PageProps = {
   input: string
   output: string
   inputName: string,
+  inputType: InputType,
+  onChangeInputType: (str: InputType) => void
   onChangeInput: (str: string) => void
   onChangeInputName: (str: string) => void
   onChangeOutput: (str: string) => void
 }
 
-function Page({ input, output, inputName, onChangeInput, onChangeInputName, onChangeOutput }:PageProps) {
+function Page({
+  input,
+  output,
+  inputType,
+  inputName,
+  onChangeInput,
+  onChangeInputType,
+  onChangeInputName,
+  onChangeOutput
+}:PageProps) {
   return (
     <div className="wrapper">
         <div className="page-wrapper">
@@ -29,20 +42,36 @@ function Page({ input, output, inputName, onChangeInput, onChangeInputName, onCh
                       borderRight: '1px solid rgba(101, 109, 119, 0.16)'
                     }}
                   >
-                    <div
-                      className="card-header d-flex"
-                      style={{ justifyContent: 'space-between' }}
-                    >
-                      <h3 className="card-title">
+                    <div className="card-header d-flex">
+                      <h3 className="card-title" style={{ flexGrow: 1 }}>
                         Input
                       </h3>
                       <input
                         type="text"
                         value={inputName}
-                        className="form-control"
+                        className="form-control mx-2"
                         style={{ flexBasis: 150 }}
                         onChange={(e) => onChangeInputName(e.target.value)}
                       />
+                      <select
+                        name="inputType"
+                        className="form-select"
+                        style={{ flexBasis: 150 }}
+                        onChange={(e) => onChangeInputType(e.target.value as InputType)}
+                      >
+                        <option
+                          value="json5"
+                          selected={inputType === 'json5'}
+                        >
+                          JSON5
+                        </option>
+                        <option
+                          value="jsonShema"
+                          selected={inputType === 'jsonShema'}
+                        >
+                          JSON Schema
+                        </option>
+                      </select>
                     </div>
                     <div className="card-body">
                       <textarea
