@@ -63,7 +63,7 @@ function Page({
                           value="json5"
                           selected={inputType === 'json5'}
                         >
-                          JSON5
+                          JSON
                         </option>
                         <option
                           value="jsonShema"
