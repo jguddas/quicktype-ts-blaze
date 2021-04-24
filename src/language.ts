@@ -65,13 +65,13 @@ class TsBlazeRenderer extends ConvenienceRenderer {
 
     const match = matchType<Sourcelike>(
       t,
-      (_anyType) => "_any()",
-      (_nullType) => "_null()",
-      (_boolType) => "_boolean()",
-      (_integerType) => "_number()",
-      (_doubleType) => "_number()",
-      (_stringType) => "_string()",
-      (arrayType) => ["_array(", this.typeMapTypeFor(arrayType.items), ")"],
+      (_anyType) => "blaze.any()",
+      (_nullType) => "blaze.null()",
+      (_boolType) => "blaze.boolean()",
+      (_integerType) => "blaze.number()",
+      (_doubleType) => "blaze.number()",
+      (_stringType) => "blaze.string()",
+      (arrayType) => ["blaze.array(", this.typeMapTypeFor(arrayType.items), ")"],
       (_classType) => panic("Should already be handled."),
       (_mapType) => panic("Maptype is not supported."),
       (_enumType) => panic("Should already be handled."),
@@ -79,10 +79,10 @@ class TsBlazeRenderer extends ConvenienceRenderer {
         const children = Array.from(unionType.getChildren()).map((type: Type) =>
           this.typeMapTypeFor(type)
         );
-        return ["_oneOf([ ", ...arrayIntercalate(", ", children), " ])"];
+        return ["blaze.oneOf([ ", ...arrayIntercalate(", ", children), " ])"];
       },
       (_transformedStringType) => {
-        return `_string().satisfies(${this.nameStyle(_transformedStringType.kind.replace('-','_'))})`;
+        return `blaze.string().satisfies(${this.nameStyle(_transformedStringType.kind.replace('-','_'))})`;
       }
     );
 
@@ -90,13 +90,13 @@ class TsBlazeRenderer extends ConvenienceRenderer {
   }
   typeMapTypeForProperty(p: ClassProperty): Sourcelike {
     if (p.isOptional) {
-      return ["_oneOf([ ", this.typeMapTypeFor(p.type), ", _undefined() ])"]
+      return ["blaze.oneOf([ ", this.typeMapTypeFor(p.type), ", blaze.undefined() ])"]
     }
     return this.typeMapTypeFor(p.type);
   }
   private emitObject(name: Name, t: ObjectType) {
     this.ensureBlankLine();
-    this.emitLine("export const ", name, " = _object({");
+    this.emitLine("export const ", name, " = blaze.object({");
     this.indent(() => {
       this.forEachClassProperty(t, "none", (_, jsonName, property) => {
         this.emitLine(`"${utf16StringEscape(jsonName)}"`, ": ", this.typeMapTypeForProperty(property), ",");
@@ -120,37 +120,8 @@ class TsBlazeRenderer extends ConvenienceRenderer {
     })
   }
   emitSourceStructure() {
-    const tsBlazeImports:string[] = []
-    this.forEachUniqType(( kind ) => {
-      if (kind === 'class') {
-        tsBlazeImports.push("object as _object")
-      } else if (kind === 'integer') {
-        tsBlazeImports.push("number as _number")
-      } else if (kind === 'bool') {
-        tsBlazeImports.push("boolean as _boolean")
-      } else if (kind === 'union') {
-        tsBlazeImports.push("oneOf as _oneOf")
-      } else if (['array', 'string', 'oneOf', 'boolean', 'null', 'any'].includes(kind)) {
-        tsBlazeImports.push(kind + ' as _' + kind)
-      }
-    })
-    if (this.haveOptionalProperties) {
-      tsBlazeImports.push('undefined as _undefined')
-    }
-    if (tsBlazeImports.length) {
-      if (tsBlazeImports.length < 5) {
-        this.emitLine(["import { ", tsBlazeImports.join(', '), " } from 'ts-blaze';"])
-      } else {
-        this.emitLine("import {")
-        this.indent(() => {
-          tsBlazeImports.forEach((val, idx, arr) => {
-            this.emitLine(idx === arr.length -1 ? val : [val, ","])
-          })
-        })
-        this.emitLine("} from 'ts-blaze';")
-      }
-      this.ensureBlankLine()
-    }
+    this.emitLine('import * as blaze from "ts-blaze"')
+    this.ensureBlankLine()
 
     const regexps:string[] = []
     const stringFns:string[] = []
