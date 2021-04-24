@@ -27,17 +27,14 @@ const EXAMPLE_JSON5 = `
 
 const EXAMPLE_JSON_SCHEMA = `
 {
-  "id": "http://json-schema.org/geo",
-  "$schema": "http://json-schema.org/draft-06/schema#",
-  "description": "A geographical coordinate",
-  "type": "object",
-  "properties": {
-    "latitude": {
-      "type": "number"
-    },
-    "longitude": {
-      "type": "number"
-    }
+  id: 'http://json-schema.org/geo',
+  $schema: 'http://json-schema.org/draft-06/schema#',
+  description: 'A geographical coordinate',
+  type: 'object',
+  required: [ 'latitude', 'longitude' ],
+  properties: {
+    latitude: { type: 'number' },
+    longitude: { type: 'number' }
   }
 }
 `.trim()
