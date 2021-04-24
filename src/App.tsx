@@ -86,7 +86,10 @@ const quicktypeJSONSchema = async (
 ):Promise<string> => {
   const schemaInput = new JSONSchemaInput(new FetchingJSONSchemaStore());
 
-  await schemaInput.addSource({ name: inputName, schema: str });
+  await schemaInput.addSource({
+    name: inputName,
+    schema: JSON.stringify(await parseJson(str))
+  });
 
   const inputData = new InputData();
   inputData.addInput(schemaInput);
