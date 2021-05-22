@@ -53,7 +53,7 @@ export class TsBlazeTargetLanguage extends TargetLanguage {
   }
 }
 class TsBlazeRenderer extends ConvenienceRenderer {
-  nameStyle(name:string):string { return `is_${name}`.replace(/(_|\s)+./g,x => x.slice(-1).toUpperCase()) }
+  nameStyle(name:string):string { return `is_${name}`.replace(/(\.|_|\s)+./g,x => x.slice(-1).toUpperCase()) }
   namerForObjectProperty():Namer { return funPrefixNamer("properties", this.nameStyle) }
   makeUnionMemberNamer():Namer { return funPrefixNamer("union-member", this.nameStyle) }
   makeNamedTypeNamer():Namer { return funPrefixNamer("types", this.nameStyle) }
