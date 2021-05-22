@@ -197,7 +197,7 @@ class TsBlazeRenderer extends ConvenienceRenderer {
           .filter(val => val > -1 && val !== index)
           .map((val):[number,number] => [ index, val ])
       }).reduce<[number,number][]>((acc, val) => acc.concat(val), []).concat([[ -1, 0 ]])
-    ).reverse().forEach((i) => i >- 1 && this.emitGatheredSource(mapValue[i]))
+    ).reverse().forEach((i) => i >- 1 && mapValue[i] && this.emitGatheredSource(mapValue[i]))
 
     // now emit top levels
     this.forEachTopLevel("none", (type, name) => {
@@ -206,7 +206,7 @@ class TsBlazeRenderer extends ConvenienceRenderer {
         this.ensureBlankLine()
         this.emitLine("export default ", name, ';');
       } else if (type.kind === "array") {
-        this.emitExport(name, ["_array(", this.typeMapTypeFor((type as any).items), ")"]);
+        this.emitExport(name, ["blaze.array(", this.typeMapTypeFor((type as any).items), ")"]);
       }
     });
   }
