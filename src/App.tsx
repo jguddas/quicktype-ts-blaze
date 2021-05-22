@@ -45,6 +45,11 @@ const EXAMPLES:{[key in InputType]:string} = {
   jsonShema: EXAMPLE_JSON_SCHEMA
 }
 
+const addDefaultType = (str:string) => str.replace(
+  /export default is(.*);/,
+  'export type $1 = blaze.InferValidatorType<typeof is$1>;\n\n$&'
+)
+
 const parseJson = async (str: string):Promise<any> => {
   try {
     return json5.parse(str)
@@ -73,7 +78,7 @@ const quicktypeJSON = async (
     lang: targetLanguage,
   });
 
-  return result.lines.join('\n')
+  return addDefaultType(result.lines.join('\n'))
 }
 
 const quicktypeJSONSchema = async (
@@ -96,7 +101,7 @@ const quicktypeJSONSchema = async (
     lang: targetLanguage,
   });
 
-  return result.lines.join('\n')
+  return addDefaultType(result.lines.join('\n'))
 }
 
 const parseInput = async (
