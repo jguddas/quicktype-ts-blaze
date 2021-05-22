@@ -203,11 +203,11 @@ class TsBlazeRenderer extends ConvenienceRenderer {
     this.forEachTopLevel("none", (type, name) => {
       if (type instanceof PrimitiveType) {
         this.emitExport(name, this.typeMapTypeFor(type));
-        this.ensureBlankLine()
-        this.emitLine("export default ", name, ';');
       } else if (type.kind === "array") {
         this.emitExport(name, ["blaze.array(", this.typeMapTypeFor((type as any).items), ")"]);
       }
+      this.ensureBlankLine()
+      this.emitLine("export default ", name, ';');
     });
   }
 }
