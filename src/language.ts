@@ -13,6 +13,7 @@ import {
   TargetLanguage,
   ConvenienceRenderer,
   RenderContext,
+  MapType,
 } from "quicktype-core";
 import { convertersOption } from 'quicktype-core/dist/support/Converters'
 import { StringTypeMapping, getNoStringTypeMapping } from 'quicktype-core/dist/TypeBuilder'
@@ -73,7 +74,7 @@ class TsBlazeRenderer extends ConvenienceRenderer {
       (_stringType) => "blaze.string()",
       (arrayType) => ["blaze.array(", this.typeMapTypeFor(arrayType.items), ")"],
       (_classType) => panic("Should already be handled."),
-      (_mapType) => panic("Maptype is not supported."),
+      (mapType) => ["blaze.record(", this.typeMapTypeFor(mapType.values), ")"],
       (_enumType) => panic("Should already be handled."),
       (unionType) => {
         const children = Array.from(unionType.getChildren()).map((type: Type) =>
@@ -203,6 +204,8 @@ class TsBlazeRenderer extends ConvenienceRenderer {
     this.forEachTopLevel("none", (type, name) => {
       if (type instanceof PrimitiveType) {
         this.emitExport(name, this.typeMapTypeFor(type));
+      } else if (type instanceof MapType) {
+        this.emitExport(name, ["blaze.record(", this.typeMapTypeFor((type as any).values), ")"]);
       } else if (type.kind === "array") {
         this.emitExport(name, ["blaze.array(", this.typeMapTypeFor((type as any).items), ")"]);
       }
