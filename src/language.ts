@@ -167,14 +167,14 @@ class TsBlazeRenderer extends ConvenienceRenderer {
     this.forEachEnum("none", (enumType, enumName) => {
       const options: Sourcelike = [];
       this.forEachEnumCase(enumType, "none", (name: Name, _jsonName, _position) => {
-        options.push("_string('");
+        options.push("blaze.string('");
         options.push(name);
         options.push("')");
         options.push(", ");
       });
       options.pop()
 
-      this.emitLine(["export const ", enumName, " = _oneOf([ ", ...options, " ]);"]);
+      this.emitLine(["export const ", enumName, " = blaze.oneOf([ ", ...options, " ]);"]);
     });
 
     const mapKey: Name[] = [];
