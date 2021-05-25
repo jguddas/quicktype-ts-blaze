@@ -90,7 +90,7 @@ class TsBlazeRenderer extends ConvenienceRenderer {
   }
   typeMapTypeForProperty(p: ClassProperty): Sourcelike {
     if (p.isOptional) {
-      return ["blaze.oneOf([ ", this.typeMapTypeFor(p.type), ", blaze.undefined() ])"]
+      return ["blaze.optional(", this.typeMapTypeFor(p.type), ")"]
     }
     return this.typeMapTypeFor(p.type);
   }
