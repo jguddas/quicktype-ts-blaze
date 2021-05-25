@@ -128,7 +128,7 @@ class TsBlazeRenderer extends ConvenienceRenderer {
     this.forEachUniqType(( kind ) => {
       switch (kind) {
         case 'integer':
-          stringFns.push("export const isInteger = (i:number) => i % 1 === 0;")
+          stringFns.push("export const isInteger = (i: number) => i % 1 === 0;")
           break
         case 'date':
           regexps.push("const DATE_REGEXP = /^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)$/;")
