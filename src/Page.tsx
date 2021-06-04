@@ -6,6 +6,7 @@ type PageProps = {
   inputName: string,
   inputType: InputType,
   onChangeInputType: (str: InputType) => void
+  onBlurInput: () => void
   onChangeInput: (str: string) => void
   onChangeInputName: (str: string) => void
   onChangeOutput: (str: string) => void
@@ -16,6 +17,7 @@ function Page({
   output,
   inputType,
   inputName,
+  onBlurInput,
   onChangeInput,
   onChangeInputType,
   onChangeInputName,
@@ -79,6 +81,7 @@ function Page({
                         className="form-control"
                         style={{ minHeight: '20rem' }}
                         onChange={(e) => onChangeInput(e.target.value)}
+                        onBlur={() => onBlurInput()}
                       />
                     </div>
                   </div>

@@ -13,7 +13,9 @@ import {
   jsonInputForTargetLanguage
 } from "quicktype-core";
 
-const EXAMPLE_JSON5 = `
+const formatJson = (inp:string):string => JSON.stringify(json5.parse(inp), null, 2)
+
+const EXAMPLE_JSON5 = formatJson(`
 {
   greeting: 'Welcome to quicktype!',
   instructions: [
@@ -23,9 +25,9 @@ const EXAMPLE_JSON5 = `
     'chosen language to parse the sample data'
   ]
 }
-`.trim()
+`).trim()
 
-const EXAMPLE_JSON_SCHEMA = `
+const EXAMPLE_JSON_SCHEMA = formatJson(`
 {
   id: 'http://json-schema.org/geo',
   $schema: 'http://json-schema.org/draft-06/schema#',
@@ -37,8 +39,7 @@ const EXAMPLE_JSON_SCHEMA = `
     longitude: { type: 'number' }
   }
 }
-`.trim()
-
+`).trim()
 
 const EXAMPLES:{[key in InputType]:string} = {
   json5: EXAMPLE_JSON5,
@@ -132,6 +133,11 @@ function App({ defaultInputType = 'json5' }: { defaultInputType?: InputType }) {
       setInput(EXAMPLES[t])
     }
   }, [ input, inputType ])
+  const formatInput = React.useCallback(() => {
+    try {
+      setInput(formatJson(input))
+    } catch (e) {}
+  }, [input])
   React.useEffect(() => {
     setOutput('Loading…')
     parseInput(input, inputName, inputType).then(setOutput, setOutput)
@@ -143,6 +149,7 @@ function App({ defaultInputType = 'json5' }: { defaultInputType?: InputType }) {
       inputType={inputType}
       output={output}
       onChangeInput={setInput}
+      onBlurInput={formatInput}
       onChangeInputType={changeInputType}
       onChangeInputName={setInputName}
       onChangeOutput={changeOutput}
