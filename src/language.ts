@@ -97,13 +97,14 @@ class TsBlazeRenderer extends ConvenienceRenderer {
   }
   private emitObject(name: Name, t: ObjectType) {
     this.ensureBlankLine();
+    const additionalProperties = t.getAdditionalProperties();
     this.emitLine("export const ", name, " = blaze.object({");
     this.indent(() => {
       this.forEachClassProperty(t, "none", (_, jsonName, property) => {
         this.emitLine(`"${utf16StringEscape(jsonName)}"`, ": ", this.typeMapTypeForProperty(property), ",");
       });
     });
-    this.emitLine("});");
+    this.emitLine(`})${additionalProperties !== undefined ? '' : '.exact()'};`);
   }
   private emitExport(name: Sourcelike, value: Sourcelike): void {
     this.emitLine("export const ", name, " = ", value, ";");
